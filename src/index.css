@@ -32,6 +32,29 @@
   }
 }
 
+/* ── Font size modes ────────────────────────────
+   Unlayered → overrides @layer base html { font-size: 17px }
+   Tailwind text-* classes use rem, so all text scales proportionally.
+──────────────────────────────────────────────── */
+html.font-mode-large {
+  font-size: 20px;
+}
+
+html.font-mode-xlarge {
+  font-size: 23px;
+}
+
+html.font-mode-large button,
+html.font-mode-xlarge button {
+  min-height: 48px;
+}
+
+html.font-mode-xlarge input,
+html.font-mode-xlarge textarea,
+html.font-mode-xlarge select {
+  font-size: 1.1rem;
+}
+
 @media print {
   .no-print {
     display: none !important;

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Home from './components/Home'
 import Questionnaire from './components/Questionnaire'
@@ -14,10 +14,27 @@ import HouseholdNav from './components/HouseholdNav'
 import AiMemo from './components/AiMemo'
 import { loadAnswers, saveAnswers, loadResult, saveResult } from './utils/storage'
 
+const FONT_MODES = ['normal', 'large', 'xlarge']
+
 export default function App() {
   const [page, setPage] = useState('home')
   const [answers, setAnswers] = useState(() => loadAnswers() || {})
   const [result, setResult] = useState(() => loadResult() || null)
+  const [fontSizeMode, setFontSizeMode] = useState(
+    () => localStorage.getItem('shnavi_fontsize') || 'normal'
+  )
+
+  useEffect(() => {
+    const html = document.documentElement
+    html.classList.remove('font-mode-normal', 'font-mode-large', 'font-mode-xlarge')
+    html.classList.add(`font-mode-${fontSizeMode}`)
+    localStorage.setItem('shnavi_fontsize', fontSizeMode)
+  }, [fontSizeMode])
+
+  const toggleFontSize = () => {
+    const next = FONT_MODES[(FONT_MODES.indexOf(fontSizeMode) + 1) % FONT_MODES.length]
+    setFontSizeMode(next)
+  }
 
   const navigate = (newPage) => {
     setPage(newPage)
@@ -34,7 +51,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header page={page} navigate={navigate} />
+      <Header page={page} navigate={navigate} fontSizeMode={fontSizeMode} onToggleFontSize={toggleFontSize} />
       <main className="max-w-2xl mx-auto px-4 pb-20">
         {page === 'home' && (
           <Home navigate={navigate} result={result} />
