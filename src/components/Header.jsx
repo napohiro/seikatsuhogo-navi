@@ -21,12 +21,8 @@ export default function Header({ page, navigate, fontSizeMode, onToggleFontSize,
     <div className="sticky top-0 z-50 no-print">
       <header className="bg-sky-700 text-white shadow-md">
         <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3" style={{ minHeight: '56px' }}>
-          {/* 左：戻るボタン or ホームアイコン */}
-          {isHome ? (
-            <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
-              <span className="text-sky-700 font-bold text-base">護</span>
-            </div>
-          ) : (
+          {/* 左：戻るボタン（サブページのみ） */}
+          {!isHome && (
             <button
               onClick={() => navigate('home')}
               className="p-2 rounded-xl hover:bg-sky-600 active:bg-sky-800 transition-colors flex-shrink-0"
