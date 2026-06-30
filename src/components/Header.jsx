@@ -1,71 +1,72 @@
-const FONT_LABELS = { normal: 'ふつう', large: '大きい', xlarge: '特大' }
-
-export default function Header({ page, navigate, fontSizeMode = 'normal', onToggleFontSize }) {
+export default function Header({ page, navigate, fontSizeMode, onToggleFontSize, onResetRequest }) {
   const isHome = page === 'home'
 
   const pageTitles = {
-    home: '生活保護申請ナビ',
+    home:          '生活困窮サポートナビ',
     questionnaire: 'かんたん診断',
-    result: '診断結果',
-    checklist: '申請準備チェックリスト',
-    phrases: '窓口で伝える文章',
-    refusal: '断られた時の対応',
-    knowledge: '制度の基礎知識',
-    case: 'モデルケースで学ぶ',
-    housing: '住まい・転居相談ナビ',
-    simulator: '暮らし方比較シミュレーター',
-    household: '世帯分離・同居相談ナビ',
-    aimemo: 'AI相談メモ',
-    flow: '申請ステップガイド',
+    result:        '診断結果',
+    checklist:     '申請準備チェックリスト',
+    phrases:       '窓口で伝える文章',
+    refusal:       '断られた時の対応',
+    knowledge:     '制度の基礎知識',
+    case:          'モデルケースで学ぶ',
+    housing:       '住まい・転居相談ナビ',
+    simulator:     '暮らし方比較シミュレーター',
+    household:     '世帯分離・同居相談ナビ',
+    aimemo:        'AI相談メモ',
+    flow:          '申請ステップガイド',
   }
 
   return (
     <div className="sticky top-0 z-50 no-print">
-      {/* Main header bar */}
       <header className="bg-sky-700 text-white shadow-md">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
-          {!isHome && (
+        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3" style={{ minHeight: '56px' }}>
+          {/* 左：戻るボタン or ホームアイコン */}
+          {isHome ? (
+            <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+              <span className="text-sky-700 font-bold text-base">護</span>
+            </div>
+          ) : (
             <button
               onClick={() => navigate('home')}
-              className="p-2 rounded-lg hover:bg-sky-600 active:bg-sky-800 transition-colors flex-shrink-0"
+              className="p-2 rounded-xl hover:bg-sky-600 active:bg-sky-800 transition-colors flex-shrink-0"
               aria-label="トップページへ戻る"
+              style={{ minHeight: '44px', minWidth: '44px' }}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
           )}
-          {isHome && (
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-sky-700 font-bold text-sm">護</span>
-            </div>
-          )}
+
+          {/* 中央：ページタイトル */}
           <div className="flex-1 min-w-0">
             <h1 className="font-bold text-lg leading-tight truncate">
-              {pageTitles[page] || '生活保護申請ナビ'}
+              {pageTitles[page] || '生活困窮サポートナビ'}
             </h1>
             {isHome && (
-              <p className="text-sky-200 text-xs">申請準備をわかりやすくナビゲート</p>
+              <p className="text-sky-200 text-xs">申請準備をわかりやすくサポート</p>
             )}
           </div>
-        </div>
-      </header>
 
-      {/* Font size bar — always visible below header */}
-      <div className="bg-white border-b-2 border-gray-200 shadow-sm">
-        <div className="max-w-2xl mx-auto px-3 py-2">
+          {/* 右：設定ボタン */}
           <button
-            onClick={onToggleFontSize}
-            className="w-full flex items-center justify-between bg-gray-50 border-2 border-sky-300 rounded-xl px-4 py-3 active:bg-sky-50 transition-colors"
-            aria-label={`文字サイズを変更する（現在：${FONT_LABELS[fontSizeMode]}）`}
+            onClick={onResetRequest}
+            className="p-2 rounded-xl hover:bg-sky-600 active:bg-sky-800 transition-colors flex-shrink-0"
+            aria-label="設定・データ初期化"
+            style={{ minHeight: '44px', minWidth: '44px' }}
           >
-            <span className="font-bold text-sky-800 text-base">🔤 文字を大きくする</span>
-            <span className="text-sm font-bold text-white bg-sky-600 px-3 py-1 rounded-lg">
-              現在：{FONT_LABELS[fontSizeMode]}
-            </span>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
           </button>
         </div>
-      </div>
+      </header>
     </div>
   )
 }

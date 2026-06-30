@@ -4,7 +4,8 @@
 
 @layer base {
   html {
-    font-size: 17px;
+    font-size: 18px;
+    line-height: 1.85;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -20,15 +21,17 @@
 
 @layer utilities {
   .btn-primary {
-    @apply bg-sky-700 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-md active:scale-95 transition-transform cursor-pointer;
+    @apply bg-sky-700 text-white font-bold py-5 px-6 rounded-2xl text-lg shadow-md active:scale-95 transition-transform cursor-pointer;
+    min-height: 60px;
   }
 
   .btn-secondary {
-    @apply bg-white text-sky-700 border-2 border-sky-700 font-bold py-4 px-6 rounded-xl text-lg shadow-sm active:scale-95 transition-transform cursor-pointer;
+    @apply bg-white text-sky-700 border-2 border-sky-700 font-bold py-5 px-6 rounded-2xl text-lg shadow-sm active:scale-95 transition-transform cursor-pointer;
+    min-height: 60px;
   }
 
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-5;
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
   }
 
   /* 警告バナー：赤ではなくオレンジ系で安心感を保つ */
@@ -38,7 +41,7 @@
 }
 
 /* ── Font size modes ────────────────────────────
-   Unlayered → overrides @layer base html { font-size: 17px }
+   Unlayered → overrides @layer base html { font-size: 18px }
    Tailwind text-* classes use rem, so all text scales proportionally.
 ──────────────────────────────────────────────── */
 html.font-mode-large {
@@ -46,18 +49,34 @@ html.font-mode-large {
 }
 
 html.font-mode-xlarge {
-  font-size: 23px;
+  font-size: 24px;
 }
 
 html.font-mode-large button,
 html.font-mode-xlarge button {
-  min-height: 48px;
+  min-height: 60px;
 }
 
 html.font-mode-xlarge input,
 html.font-mode-xlarge textarea,
 html.font-mode-xlarge select {
   font-size: 1.1rem;
+}
+
+/* ── Page transition animation ────────────────── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeSlideIn 0.2s ease-out both;
 }
 
 @media print {

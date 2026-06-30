@@ -1,4 +1,5 @@
 import { welfareOffices } from '../data/localData'
+import { GlossaryTerm, GlossaryList } from './GlossaryTooltip'
 
 const GRADE_COLORS = {
   A: 'bg-orange-50 border-orange-400 text-orange-700',
@@ -118,6 +119,18 @@ export default function Home({ navigate, result }) {
   return (
     <div className="pt-5 space-y-6 pb-6">
 
+      {/* Rights banner — 最重要メッセージ */}
+      <div className="rounded-2xl p-5 text-center" style={{ background: 'linear-gradient(135deg, #0369a1 0%, #0284c7 100%)' }}>
+        <p className="text-white font-bold text-lg leading-snug">🤝 生活保護は</p>
+        <p className="text-white font-bold text-2xl mt-1 leading-tight">
+          誰でも申請する権利があります
+        </p>
+        <p className="text-sky-100 text-sm mt-3 leading-relaxed">
+          申請を断られた場合でも、申請書を受け取る権利は法律で保障されています。
+          「申請書をください」と伝えましょう。
+        </p>
+      </div>
+
       {/* Intro */}
       <div className="card">
         <div className="flex items-start gap-3 mb-4">
@@ -198,10 +211,27 @@ export default function Home({ navigate, result }) {
             <p className="text-sm text-gray-600">{sampleOffice.address}</p>
           </div>
           <div className="mt-2 p-3 bg-amber-50 border border-amber-200 rounded-xl">
-            <p className="text-sm text-amber-800">💡 {sampleOffice.housingAllowanceNote}</p>
+            <p className="text-sm text-amber-800">
+              💡 <GlossaryTerm term="住宅扶助">{sampleOffice.housingAllowanceNote}</GlossaryTerm>
+            </p>
           </div>
         </div>
         <p className="text-xs text-gray-400 mt-2">※ 地域別情報は順次追加予定。最新情報は各自治体へご確認ください。</p>
+      </div>
+
+      {/* Glossary */}
+      <div className="card">
+        <p className="font-bold text-gray-700 mb-3">💡 難しい言葉の説明</p>
+        <div className="flex flex-wrap gap-2 mb-3">
+          {['扶養照会', '世帯分離', '住宅扶助', '最低生活費', 'ケースワーカー'].map((term) => (
+            <GlossaryTerm key={term} term={term}>
+              <span className="text-sm bg-sky-50 border border-sky-200 text-sky-700 px-3 py-1.5 rounded-xl font-medium">
+                {term}
+              </span>
+            </GlossaryTerm>
+          ))}
+        </div>
+        <GlossaryList />
       </div>
 
       {/* Privacy */}
