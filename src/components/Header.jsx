@@ -16,6 +16,7 @@ export default function Header({ page, navigate, fontSizeMode = 'normal', onTogg
     simulator: '暮らし方比較シミュレーター',
     household: '世帯分離・同居相談ナビ',
     aimemo: 'AI相談メモ',
+    flow: '申請ステップガイド',
   }
 
   return (

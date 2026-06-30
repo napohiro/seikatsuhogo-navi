@@ -30,6 +30,11 @@
   .card {
     @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-5;
   }
+
+  /* 警告バナー：赤ではなくオレンジ系で安心感を保つ */
+  .warning-banner {
+    @apply bg-amber-50 border border-amber-300 text-amber-900 p-4 rounded-xl text-sm leading-relaxed;
+  }
 }
 
 /* ── Font size modes ────────────────────────────

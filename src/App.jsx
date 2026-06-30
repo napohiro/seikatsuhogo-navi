@@ -12,6 +12,7 @@ import HousingNav from './components/HousingNav'
 import LivingSimulator from './components/LivingSimulator'
 import HouseholdNav from './components/HouseholdNav'
 import AiMemo from './components/AiMemo'
+import ApplicationFlow from './components/ApplicationFlow'
 import { loadAnswers, saveAnswers, loadResult, saveResult } from './utils/storage'
 
 const FONT_MODES = ['normal', 'large', 'xlarge']
@@ -92,6 +93,9 @@ export default function App() {
         )}
         {page === 'aimemo' && (
           <AiMemo navigate={navigate} />
+        )}
+        {page === 'flow' && (
+          <ApplicationFlow navigate={navigate} />
         )}
       </main>
 
