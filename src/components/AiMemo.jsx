@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { generateAiMemo, MEMO_FIELDS } from '../utils/aiMemoLogic'
+import { saveAiMemo } from '../utils/storage'
 
 function CopyButton({ text, label = 'コピー', color = 'green' }) {
   const [copied, setCopied] = useState(false)
@@ -53,8 +54,8 @@ function SectionCard({ icon, title, colorClass, children, copyText }) {
   )
 }
 
-export default function AiMemo({ navigate }) {
-  const [inputs, setInputs] = useState({})
+export default function AiMemo({ navigate, initialInputs = null, startView = 'inputs' }) {
+  const [inputs, setInputs] = useState(initialInputs || {})
   const [result, setResult] = useState(null)
   const [activeSection, setActiveSection] = useState('questions')
 
@@ -63,6 +64,7 @@ export default function AiMemo({ navigate }) {
   const hasAnyInput = MEMO_FIELDS.some((f) => inputs[f.id] && inputs[f.id].trim())
 
   const handleGenerate = () => {
+    saveAiMemo(inputs)
     const memo = generateAiMemo(inputs)
     setResult(memo)
     window.scrollTo({ top: 0, behavior: 'smooth' })

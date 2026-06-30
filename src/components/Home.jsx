@@ -234,6 +234,20 @@ export default function Home({ navigate, result }) {
         <GlossaryList />
       </div>
 
+      {/* Input history */}
+      <div className="card border-l-4 border-indigo-400">
+        <p className="font-bold text-indigo-800 mb-2 text-lg">📝 入力内容の確認・修正</p>
+        <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+          以前に入力した診断・シミュレーション・AI相談メモなどの内容を確認したり、修正したりできます。
+        </p>
+        <button
+          onClick={() => navigate('history')}
+          className="w-full py-5 bg-indigo-600 text-white font-bold rounded-2xl text-lg active:bg-indigo-700 transition-colors"
+        >
+          📋 入力内容を確認・修正する
+        </button>
+      </div>
+
       {/* Privacy */}
       <div className="p-4 bg-gray-100 rounded-2xl">
         <p className="text-sm text-gray-600 flex items-start gap-2">

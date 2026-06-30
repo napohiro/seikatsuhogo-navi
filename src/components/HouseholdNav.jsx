@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { householdQuestions } from '../data/householdQuestions'
 import { diagnoseHousehold, generateHouseholdPhrase } from '../utils/householdDiagnosis'
+import { saveHousehold } from '../utils/storage'
 
 const ISSUE_LEVEL_STYLE = {
   critical: 'bg-red-50 border-red-300 text-red-800',
@@ -117,8 +118,8 @@ function IntroView({ onStart }) {
   )
 }
 
-function QuestionnaireView({ onComplete }) {
-  const [answers, setAnswers] = useState({})
+function QuestionnaireView({ onComplete, initialAnswers }) {
+  const [answers, setAnswers] = useState(initialAnswers || {})
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const visibleQuestions = householdQuestions.filter((q) => {
@@ -399,13 +400,16 @@ function ResultView({ answers, onRetry, navigate }) {
   )
 }
 
-export default function HouseholdNav({ navigate }) {
-  const [view, setView] = useState('intro')
-  const [answers, setAnswers] = useState(null)
+export default function HouseholdNav({ navigate, startView = 'intro', initialAnswers = null }) {
+  const [view, setView] = useState(
+    startView === 'questionnaire' || startView === 'result' ? startView : 'intro'
+  )
+  const [answers, setAnswers] = useState(initialAnswers)
 
   const handleStart = () => setView('questionnaire')
   const handleComplete = (a) => {
     setAnswers(a)
+    saveHousehold(a)
     setView('result')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -417,7 +421,9 @@ export default function HouseholdNav({ navigate }) {
   return (
     <>
       {view === 'intro' && <IntroView onStart={handleStart} />}
-      {view === 'questionnaire' && <QuestionnaireView onComplete={handleComplete} />}
+      {view === 'questionnaire' && (
+        <QuestionnaireView onComplete={handleComplete} initialAnswers={answers} />
+      )}
       {view === 'result' && answers && (
         <ResultView answers={answers} onRetry={handleRetry} navigate={navigate} />
       )}

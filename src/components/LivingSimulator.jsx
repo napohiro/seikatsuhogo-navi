@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { simulatorQuestions } from '../data/simulatorQuestions'
 import { simulate, generateComparisonPhrase } from '../utils/simulatorLogic'
+import { saveSimulator } from '../utils/storage'
 
 const POSSIBILITY_CONFIG = {
   high: {
@@ -126,8 +127,8 @@ function IntroView({ onStart }) {
   )
 }
 
-function QuestionnaireView({ onComplete }) {
-  const [answers, setAnswers] = useState({})
+function QuestionnaireView({ onComplete, initialAnswers }) {
+  const [answers, setAnswers] = useState(initialAnswers || {})
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const visibleQuestions = simulatorQuestions.filter((q) => {
@@ -516,13 +517,16 @@ function ResultView({ answers, onRetry, navigate }) {
   )
 }
 
-export default function LivingSimulator({ navigate }) {
-  const [view, setView] = useState('intro')
-  const [answers, setAnswers] = useState(null)
+export default function LivingSimulator({ navigate, startView = 'intro', initialAnswers = null }) {
+  const [view, setView] = useState(
+    startView === 'questionnaire' || startView === 'result' ? startView : 'intro'
+  )
+  const [answers, setAnswers] = useState(initialAnswers)
 
   const handleStart = () => setView('questionnaire')
   const handleComplete = (a) => {
     setAnswers(a)
+    saveSimulator(a)
     setView('result')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -534,7 +538,9 @@ export default function LivingSimulator({ navigate }) {
   return (
     <>
       {view === 'intro' && <IntroView onStart={handleStart} />}
-      {view === 'questionnaire' && <QuestionnaireView onComplete={handleComplete} />}
+      {view === 'questionnaire' && (
+        <QuestionnaireView onComplete={handleComplete} initialAnswers={answers} />
+      )}
       {view === 'result' && answers && (
         <ResultView answers={answers} onRetry={handleRetry} navigate={navigate} />
       )}

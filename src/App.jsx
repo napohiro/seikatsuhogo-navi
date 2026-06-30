@@ -13,6 +13,7 @@ import LivingSimulator from './components/LivingSimulator'
 import HouseholdNav from './components/HouseholdNav'
 import AiMemo from './components/AiMemo'
 import ApplicationFlow from './components/ApplicationFlow'
+import HistoryView from './components/HistoryView'
 import BottomNav from './components/BottomNav'
 import ConfirmDialog from './components/ConfirmDialog'
 import { loadAnswers, saveAnswers, loadResult, saveResult, clearAll } from './utils/storage'
@@ -31,6 +32,7 @@ const NEXT_PAGE_MAP = {
 export default function App() {
   const [page, setPage] = useState('home')
   const [pageHistory, setPageHistory] = useState([])
+  const [pageParams, setPageParams] = useState({})
   const [answers, setAnswers] = useState(() => loadAnswers() || {})
   const [result, setResult] = useState(() => loadResult() || null)
   const [fontSizeMode, setFontSizeMode] = useState(
@@ -52,22 +54,28 @@ export default function App() {
 
   const navigateHome = () => {
     setPageHistory([])
+    setPageParams({})
     setPage('home')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const navigate = (newPage) => {
-    if (newPage === page) return
+  const navigate = (newPage, params = {}) => {
+    if (newPage === page && JSON.stringify(params) === JSON.stringify(pageParams)) return
     if (newPage === 'home') { navigateHome(); return }
     setPageHistory((prev) => [...prev, page])
+    setPageParams(params)
     setPage(newPage)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
+
+  // HistoryView から呼び出す専用ナビ（params 付き）
+  const navigateWithParams = (newPage, params) => navigate(newPage, params)
 
   const navigateBack = () => {
     if (pageHistory.length === 0) return
     const prev = pageHistory[pageHistory.length - 1]
     setPageHistory((h) => h.slice(0, -1))
+    setPageParams({})
     setPage(prev)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -102,7 +110,7 @@ export default function App() {
       />
 
       <main className="max-w-2xl mx-auto px-4 pb-28">
-        <div key={page} className="animate-fade-in">
+        <div key={`${page}-${JSON.stringify(pageParams)}`} className="animate-fade-in">
           {page === 'home' && (
             <Home navigate={navigate} result={result} />
           )}
@@ -135,16 +143,31 @@ export default function App() {
             <HousingNav navigate={navigate} />
           )}
           {page === 'simulator' && (
-            <LivingSimulator navigate={navigate} />
+            <LivingSimulator
+              navigate={navigate}
+              startView={pageParams.startView || 'intro'}
+              initialAnswers={pageParams.initialAnswers || null}
+            />
           )}
           {page === 'household' && (
-            <HouseholdNav navigate={navigate} />
+            <HouseholdNav
+              navigate={navigate}
+              startView={pageParams.startView || 'intro'}
+              initialAnswers={pageParams.initialAnswers || null}
+            />
           )}
           {page === 'aimemo' && (
-            <AiMemo navigate={navigate} />
+            <AiMemo
+              navigate={navigate}
+              startView={pageParams.startView || 'inputs'}
+              initialInputs={pageParams.initialInputs || null}
+            />
           )}
           {page === 'flow' && (
             <ApplicationFlow navigate={navigate} />
+          )}
+          {page === 'history' && (
+            <HistoryView navigate={navigate} navigateWithParams={navigateWithParams} />
           )}
         </div>
       </main>
