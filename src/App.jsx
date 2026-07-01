@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Home from './components/Home'
+import FamilySupportHub from './components/FamilySupportHub'
 import Questionnaire from './components/Questionnaire'
 import Result from './components/Result'
 import Checklist from './components/Checklist'
@@ -112,7 +113,16 @@ export default function App() {
       <main className="max-w-2xl mx-auto px-4 pb-28">
         <div key={`${page}-${JSON.stringify(pageParams)}`} className="animate-fade-in">
           {page === 'home' && (
-            <Home navigate={navigate} result={result} />
+            <Home
+              navigate={navigate}
+              result={result}
+              onResetRequest={() => setShowReset(true)}
+              fontSizeMode={fontSizeMode}
+              onToggleFontSize={toggleFontSize}
+            />
+          )}
+          {page === 'familysupport' && (
+            <FamilySupportHub navigate={navigate} />
           )}
           {page === 'questionnaire' && (
             <Questionnaire

@@ -133,27 +133,27 @@ export default function Checklist({ navigate }) {
   const requiredChecked = CHECKLIST_ITEMS.filter((i) => i.required && checked[i.id]).length
 
   return (
-    <div className="pt-5 space-y-5">
+    <div className="pt-5 space-y-5 pb-6">
       {/* Header card */}
-      <div className="card">
-        <h2 className="text-xl font-bold text-gray-800 mb-2">申請準備チェックリスト</h2>
-        <p className="text-sm text-gray-500 mb-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+        <h2 className="text-xl font-bold text-gray-800 mb-1">申請の準備リスト</h2>
+        <p className="text-sm text-gray-500 mb-4 leading-relaxed">
           書類が全部そろっていなくても申請できます。後日提出でも大丈夫です。
         </p>
 
         {/* Progress */}
-        <div className="space-y-1">
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-600">準備できた書類</span>
+        <div className="space-y-2">
+          <div className="flex justify-between text-base">
+            <span className="text-gray-600">準備できたもの</span>
             <span className="font-bold text-sky-700">{checkedCount} / {total}</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
+          <div className="w-full bg-gray-200 rounded-full h-4">
             <div
-              className="bg-sky-600 h-3 rounded-full transition-all"
+              className="bg-sky-600 h-4 rounded-full transition-all"
               style={{ width: `${Math.round((checkedCount / total) * 100)}%` }}
             />
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-sm text-gray-500">
             必須書類：{requiredChecked} / {requiredTotal} 準備済み
           </p>
         </div>
@@ -163,71 +163,82 @@ export default function Checklist({ navigate }) {
       {categories.map((cat) => {
         const items = CHECKLIST_ITEMS.filter((i) => i.category === cat)
         return (
-          <div key={cat} className="card space-y-1">
-            <h3 className="font-bold text-base text-gray-500 mb-3 flex items-center gap-2">
-              <span className="w-1 h-5 bg-sky-500 rounded-full inline-block" />
+          <div key={cat} className="space-y-2">
+            <h3 className="text-base font-bold text-gray-500 px-1 flex items-center gap-2">
+              <span className="w-1.5 h-5 bg-sky-500 rounded-full inline-block" />
               {cat}
             </h3>
-            {items.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => toggle(item.id)}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-start gap-3
-                  ${checked[item.id]
-                    ? 'bg-green-50 border-green-400'
-                    : 'bg-white border-gray-200 hover:border-sky-300'
+            {items.map((item) => {
+              const done = !!checked[item.id]
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => toggle(item.id)}
+                  className={`w-full text-left rounded-2xl border-2 transition-all flex items-center gap-4 px-5 py-4 ${
+                    done
+                      ? 'bg-green-50 border-green-400'
+                      : 'bg-white border-gray-200 active:border-sky-300'
                   }`}
-              >
-                <div className={`w-6 h-6 rounded-md border-2 flex-shrink-0 flex items-center justify-center mt-0.5 transition-colors
-                  ${checked[item.id] ? 'bg-green-500 border-green-500' : 'border-gray-400'}`}
+                  style={{ minHeight: '72px' }}
                 >
-                  {checked[item.id] && (
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-base font-medium ${checked[item.id] ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-                      {item.label}
-                    </span>
-                    {item.required && (
-                      <span className="text-xs bg-red-100 text-red-700 font-bold px-1.5 py-0.5 rounded">必須</span>
+                  {/* Status badge */}
+                  <span
+                    className={`flex-shrink-0 text-sm font-bold px-3 py-1.5 rounded-xl whitespace-nowrap ${
+                      done
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-100 text-gray-500'
+                    }`}
+                  >
+                    {done ? 'できた ✓' : 'まだ'}
+                  </span>
+
+                  {/* Item info */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`text-base font-medium leading-snug ${done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+                        {item.label}
+                      </span>
+                      {item.required && (
+                        <span className="text-xs bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-lg flex-shrink-0">
+                          必須
+                        </span>
+                      )}
+                    </div>
+                    {item.note && (
+                      <p className="text-sm text-gray-500 mt-0.5 leading-relaxed">{item.note}</p>
                     )}
                   </div>
-                  {item.note && (
-                    <p className="text-sm text-gray-500 mt-0.5">{item.note}</p>
-                  )}
-                </div>
-              </button>
-            ))}
+                </button>
+              )
+            })}
           </div>
         )
       })}
 
       {/* Tips */}
-      <div className="card border-l-4 border-sky-500">
-        <p className="font-bold text-sky-800 mb-2">💡 申請時のポイント</p>
-        <ul className="space-y-2 text-sm text-gray-700">
-          <li>・書類が不足していても「申請書をください」と必ず言いましょう</li>
-          <li>・不足書類は後日提出でOKです。申請日が保護開始日の基準になります</li>
-          <li>・「書類がないと申請できない」と言われたら断ることができます</li>
+      <div className="bg-sky-50 border-l-4 border-sky-500 rounded-2xl p-5">
+        <p className="font-bold text-sky-800 mb-3">💡 申請するときのポイント</p>
+        <ul className="space-y-2 text-base text-gray-700 leading-relaxed">
+          <li>・書類が足りなくても「申請書をください」と必ず言いましょう</li>
+          <li>・足りない書類は後で持ってきてもOKです</li>
+          <li>・「書類がないと申請できない」と言われたら断れます</li>
         </ul>
       </div>
 
       <button
         onClick={() => navigate('phrases')}
         className="btn-primary w-full"
+        style={{ minHeight: '64px' }}
       >
-        💬 窓口で伝える文章を確認する
+        💬 窓口で言う言葉を確認する →
       </button>
 
       <button
         onClick={() => window.print()}
         className="w-full py-4 rounded-xl border-2 border-gray-300 text-gray-600 font-bold text-lg"
+        style={{ minHeight: '60px' }}
       >
-        🖨️ チェックリストを印刷する
+        🖨️ リストを印刷する
       </button>
     </div>
   )

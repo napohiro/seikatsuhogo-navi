@@ -78,13 +78,13 @@ export default function Questionnaire({ onComplete, initialAnswers, navigate }) 
     <div className="pt-5 space-y-4">
       {/* Progress */}
       <div className="space-y-2">
-        <div className="flex justify-between text-sm text-gray-500">
+        <div className="flex justify-between text-base text-gray-500">
           <span>{current.section}</span>
-          <span>{currentIndex + 1} / {total}</span>
+          <span className="font-medium">{currentIndex + 1} / {total}</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3">
+        <div className="w-full bg-gray-200 rounded-full h-4">
           <div
-            className="bg-sky-600 h-3 rounded-full transition-all duration-300"
+            className="bg-sky-600 h-4 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -92,11 +92,11 @@ export default function Questionnaire({ onComplete, initialAnswers, navigate }) 
 
       {/* Question card */}
       <div className="card">
-        <p className="text-xl font-bold text-gray-800 leading-relaxed whitespace-pre-line mb-1">
+        <p className="text-2xl font-bold text-gray-800 leading-relaxed whitespace-pre-line mb-1">
           {current.question}
         </p>
         {current.hint && (
-          <p className="text-sm text-gray-500 mt-1 mb-3">{current.hint}</p>
+          <p className="text-base text-gray-500 mt-2 mb-3 leading-relaxed">{current.hint}</p>
         )}
 
         <div className="mt-4 space-y-2">
@@ -117,17 +117,18 @@ export default function Questionnaire({ onComplete, initialAnswers, navigate }) 
               <button
                 key={opt.value}
                 onClick={() => handleRadioChange(opt.value)}
+                style={{ minHeight: '64px' }}
                 className={`w-full text-left px-4 py-4 rounded-xl border-2 text-lg font-medium transition-colors
                   ${selected
                     ? 'bg-sky-600 border-sky-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-sky-400'
+                    : 'bg-white border-gray-300 text-gray-700 active:border-sky-400'
                   }`}
               >
                 <span className="flex items-center gap-3">
-                  <span className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center
+                  <span className={`w-6 h-6 rounded-full border-2 flex-shrink-0 flex items-center justify-center
                     ${selected ? 'border-white' : 'border-gray-400'}`}
                   >
-                    {selected && <span className="w-2.5 h-2.5 rounded-full bg-white" />}
+                    {selected && <span className="w-3 h-3 rounded-full bg-white" />}
                   </span>
                   {opt.label}
                 </span>
@@ -141,18 +142,19 @@ export default function Questionnaire({ onComplete, initialAnswers, navigate }) 
               <button
                 key={opt.value}
                 onClick={() => handleCheckboxChange(opt.value)}
+                style={{ minHeight: '64px' }}
                 className={`w-full text-left px-4 py-4 rounded-xl border-2 text-lg font-medium transition-colors
                   ${selected
                     ? 'bg-sky-600 border-sky-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-sky-400'
+                    : 'bg-white border-gray-300 text-gray-700 active:border-sky-400'
                   }`}
               >
                 <span className="flex items-center gap-3">
-                  <span className={`w-5 h-5 rounded-lg border-2 flex-shrink-0 flex items-center justify-center
+                  <span className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center
                     ${selected ? 'border-white bg-white' : 'border-gray-400'}`}
                   >
                     {selected && (
-                      <svg className="w-3 h-3 text-sky-600" fill="currentColor" viewBox="0 0 12 12">
+                      <svg className="w-4 h-4 text-sky-600" fill="currentColor" viewBox="0 0 12 12">
                         <path d="M10 3L5 8.5 2 5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
                       </svg>
                     )}
@@ -174,21 +176,23 @@ export default function Questionnaire({ onComplete, initialAnswers, navigate }) 
         {currentIndex > 0 && (
           <button
             onClick={handlePrev}
-            className="flex-1 btn-secondary py-4 text-lg"
+            style={{ minHeight: '64px' }}
+            className="flex-1 btn-secondary text-lg"
           >
-            ← 前の質問
+            ← 前に戻る
           </button>
         )}
         <button
           onClick={handleNext}
           disabled={!canProceed()}
-          className={`flex-1 py-4 rounded-xl font-bold text-lg shadow-md transition-all
+          style={{ minHeight: '64px' }}
+          className={`flex-1 rounded-xl font-bold text-lg shadow-md transition-all
             ${canProceed()
-              ? 'bg-sky-700 text-white active:scale-95'
+              ? 'bg-sky-700 text-white active:opacity-90'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
             }`}
         >
-          {isLastQuestion ? '診断結果を見る →' : '次の質問 →'}
+          {isLastQuestion ? '結果を見る →' : '次の質問 →'}
         </button>
       </div>
 
@@ -196,7 +200,7 @@ export default function Questionnaire({ onComplete, initialAnswers, navigate }) 
       {current.required === false && !currentAnswer && (
         <button
           onClick={handleNext}
-          className="w-full text-center text-gray-400 text-base py-2 underline"
+          className="w-full text-center text-gray-400 text-base py-3 underline"
         >
           この質問をスキップする
         </button>

@@ -15,6 +15,8 @@ export default function Header({ page, navigate, fontSizeMode, onToggleFontSize,
     household:     '世帯分離・同居相談ナビ',
     aimemo:        'AI相談メモ',
     flow:          '申請ステップガイド',
+    familysupport: '家族・支援者向け',
+    history:       '入力内容の確認・修正',
   }
 
   return (
